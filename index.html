@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>_99# — The Code That Time Forgot. Rebuilt For The Future.</title>
+    <meta name="description" content="A Gen Z cultural-tech experience reviving India's forgotten *99# payment era with futuristic AI, offline intelligence, and modern digital experiences.">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="_99# — The Code That Time Forgot">
+    <meta property="og:description" content="India's iconic payment revolution reborn with modern cyberpunk aesthetic and AI intelligence.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        midnight: '#030308',
+                        'midnight-card': '#0a0a14',
+                        lime: {
+                            accent: '#ccff00',
+                            glow: 'rgba(204, 255, 0, 0.4)'
+                        },
+                        cyber: {
+                            purple: '#8a2be2',
+                            magenta: '#ff007f',
+                            cyan: '#00f3ff'
+                        },
+                        digital: {
+                            orange: '#ff5500'
+                        }
+                    },
+                    fontFamily: {
+                        syne: ['Syne', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Base styles & Glitch Effects */
+        :root {
+            --lime: #ccff00;
+            --purple: #8a2be2;
+            --bg: #030308;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030308;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a1a2e;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--lime);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--lime);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease-out, background-color 0.15s ease-out, border-color 0.15s ease-out;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        .custom-cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--lime);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(15, 15, 28, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(204, 255, 0, 0.4);
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.15);
+            transform: translateY(-4px);
+        }
+
+        /* Neon Text & Border Glows */
+        .text-glow-lime {
+            text-shadow: 0 0 15px rgba(204, 255, 0, 0.6);
+        }
+        .text-glow-purple {
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.8);
+        }
+        .border-glow-lime {
+            box-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
+        }
+
+        /* Cyber CRT / Scanline Effect */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 20;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Glitch Animation */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 0, 0, 0);
+        }
+        .glitch-text::before {
+            left: -2px;
+            text-shadow: 2px 0 #ff007f;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: 2px;
+            text-shadow: -2px 0 #00f3ff;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            20% { clip: rect(50px, 9999px, 80px, 0); }
+            40% { clip: rect(10px, 9999px, 40px, 0); }
+            60% { clip: rect(70px, 9999px, 20px, 0); }
+            80% { clip: rect(30px, 9999px, 60px, 0); }
+            100% { clip: rect(90px, 9999px, 10px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(10px, 9999px, 80px, 0); }
+            20% { clip: rect(80px, 9999px, 10px, 0); }
+            40% { clip: rect(30px, 9999px, 50px, 0); }
+            60% { clip: rect(60px, 9999px, 90px, 0); }
+            80% { clip: rect(15px, 9999px, 30px, 0); }
+            100% { clip: rect(40px, 9999px, 70px, 0); }
+        }
+
+        /* Canvas positions */
+        #hero-canvas, #map-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Retro Phone Keypad styles */
+        .keypad-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.15s ease;
+        }
+        .keypad-btn:active, .keypad-btn.active {
+            background: var(--lime);
+            color: #000;
+            box-shadow: 0 0 15px var(--lime);
+            transform: scale(0.95);
+        }
+
+        /* Retro Nokia LCD Green Display */
+        .nokia-lcd {
+            background-color: #8bb070;
+            color: #122108;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Futuristic Phone HUD Screen */
+        .cyber-hud {
+            background: rgba(5, 10, 25, 0.9);
+            border: 1px solid #00f3ff;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        /* Noise background overlay */
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Interactive Grid lines */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-midnight text-white bg-noise selection:bg-lime-accent selection:text-black">
+
+    <!-- Custom Cursor elements -->
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="custom-cursor-dot hidden md:block"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 px-6 py-4 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 group">
+                <span class="font-syne text-2xl font-black tracking-tighter text-lime-accent group-hover:text-white transition-colors">_99#</span>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-white/10 text-white/70 border border-white/10 group-hover:border-lime-accent transition-colors">v2026.1</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8 font-mono text-sm tracking-wide text-white/70">
+                <a href="#memory" class="hover:text-lime-accent transition-colors">01. MEMORY</a>
+                <a href="#simulator" class="hover:text-lime-accent transition-colors">02. THE CODE</a>
+                <a href="#comparison" class="hover:text-lime-accent transition-colors">03. REVOLUTION</a>
+                <a href="#modes" class="hover:text-lime-accent transition-colors">04. MODES</a>
+                <a href="#future" class="hover:text-lime-accent transition-colors">05. FUTURE</a>
+            </nav>
+
+            <a href="#simulator" class="magnetic-btn relative group overflow-hidden rounded-full p-[1px] font-mono text-xs font-bold uppercase tracking-wider">
+                <span class="absolute inset-0 bg-gradient-to-r from-lime-accent via-cyber-cyan to-cyber-purple rounded-full animate-spin-slow"></span>
+                <span class="relative block px-5 py-2.5 rounded-full bg-midnight transition-colors group-hover:bg-transparent group-hover:text-black font-extrabold">
+                    EXECUTE *99#
+                </span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 1. CINEMATIC INTRO LOADING SCREEN -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] bg-midnight flex flex-col justify-center items-center px-4 scanlines">
+        <div class="max-w-xl w-full text-center space-y-6">
+            <!-- Retro Screen Container -->
+            <div id="intro-retro-box" class="nokia-lcd p-8 rounded-lg border-4 border-neutral-800 shadow-2xl relative overflow-hidden">
+                <div class="flex justify-between items-center text-xs border-b border-neutral-800/40 pb-2 mb-6 font-mono">
+                    <span>NOKIA 3310</span>
+                    <span id="signal-bars">SIGNAL: ▮▮▮▮▯</span>
+                </div>
+                
+                <div class="h-28 flex flex-col justify-center items-center text-center">
+                    <div id="intro-text-1" class="text-xl md:text-2xl font-extrabold uppercase tracking-widest font-mono">
+                        2000s INDIA
+                    </div>
+                    <div id="intro-text-2" class="text-sm font-mono mt-2 hidden text-neutral-800">
+                        Nokia Phones • SMS Era • Missed Calls
+                    </div>
+                </div>
+
+                <div class="w-full bg-neutral-800/20 h-2 rounded-full overflow-hidden mt-4 border border-neutral-800/40">
+                    <div id="intro-progress" class="bg-neutral-900 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Futuristic Reboot Text (Initially Hidden) -->
+            <div id="intro-cyber-box" class="hidden space-y-4">
+                <h1 class="text-4xl md:text-6xl font-black font-syne text-lime-accent glitch-text" data-text="SYSTEM REBOOTING...">
+                    SYSTEM REBOOTING...
+                </h1>
+                <p class="text-cyber-cyan font-mono text-lg tracking-widest animate-pulse">
+                    > _99# ACTIVATED /// REBUILDING ERA
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main id="main-content" class="opacity-0 transition-opacity duration-1000">
+
+        <!-- 2. HERO SECTION -->
+        <section class="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden grid-bg">
+            <canvas id="hero-canvas"></canvas>
+            
+            <div class="max-w-6xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+                <!-- Tagline Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-lime-accent/30 text-lime-accent font-mono text-xs uppercase tracking-widest mb-8 animate-bounce">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    <span>The Code That Time Forgot. Rebuilt For The Future.</span>
+                </div>
+
+                <!-- Main Hero Headline -->
+                <h1 class="text-5xl sm:text-7xl md:text-8xl font-black font-syne tracking-tight leading-[0.95] mb-8 uppercase">
+                    Before UPI Had Apps,<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-white to-cyber-cyan text-glow-lime">
+                        India Had A Code.
+                    </span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="max-w-2xl text-lg sm:text-xl text-white/70 font-space mb-10 leading-relaxed">
+                    The forgotten USSD banking revolution returns for the next generation. Powered by modern AI, offline speed, and zero internet dependency.
+                </p>
+
+                <!-- Hero Buttons -->
+                <div class="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
+                    <a href="#simulator" class="magnetic-btn w-full sm:w-auto px-8 py-4 rounded-full bg-lime-accent text-black font-syne font-bold uppercase tracking-wider text-sm hover:bg-white hover:shadow-[0_0_35px_rgba(204,255,0,0.6)] transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        <span>Experience The Code</span>
+                    </a>
+                    <a href="#memory" class="magnetic-btn w-full sm:w-auto px-8 py-4 rounded-full glass-card border border-white/20 text-white font-syne font-bold uppercase tracking-wider text-sm hover:border-cyber-cyan hover:text-cyber-cyan transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                        <span>Enter _99# World</span>
+                    </a>
+                </div>
+
+                <!-- Floating 3D Graphic Placeholder / Dynamic Display -->
+                <div class="mt-16 w-full max-w-2xl glass-panel p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-lime-accent/10 via-cyber-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between font-mono text-xs text-white/50 border-b border-white/10 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-lime-accent animate-ping"></span>
+                            <span class="text-white">USSD SIGNAL ACTIVE</span>
+                        </div>
+                        <span>FREQ: 99.0 MHz</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-center font-mono">
+                        <div class="p-3 rounded-lg bg-white/5">
+                            <div class="text-xs text-white/50">NETWORK</div>
+                            <div class="text-lime-accent font-bold mt-1">GSM / ZERO DATA</div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-white/5">
+                            <div class="text-xs text-white/50">LATENCY</div>
+                            <div class="text-cyber-cyan font-bold mt-1">&lt; 120ms</div>
+                        </div>
+                        <div class="p-3 rounded-lg bg-white/5">
+                            <div class="text-xs text-white/50">COMPATIBILITY</div>
+                            <div class="text-cyber-purple font-bold mt-1">100% PHONES</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MEMORY TIMELINE SECTION -->
+        <section id="memory" class="py-28 relative border-t border-white/10 grid-bg">
+            <div class="max-w-6xl mx-auto px-6">
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-20">
+                    <h2 class="text-xs font-mono uppercase text-lime-accent tracking-widest mb-3">// ARCHIVE HISTORY</h2>
+                    <p class="text-4xl md:text-6xl font-black font-syne uppercase tracking-tight">
+                        The Evolution Of <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-purple">Indian Tech</span>
+                    </p>
+                </div>
+
+                <!-- Timeline Items Container -->
+                <div class="relative border-l-2 border-white/10 ml-4 md:ml-32 space-y-16">
+                    
+                    <!-- 2005 -->
+                    <div class="timeline-item relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-midnight border-2 border-white/40 group-hover:border-lime-accent group-hover:bg-lime-accent transition-all"></div>
+                        <div class="font-mono text-sm text-lime-accent font-bold mb-1">2005</div>
+                        <h3 class="text-2xl md:text-3xl font-bold font-syne mb-2">Missed Call Era</h3>
+                        <p class="text-white/60 max-w-xl text-sm leading-relaxed mb-4">
+                            The era of stealth communication. Giving 2 missed calls meant "I arrived safely." Giving 3 meant "Call me back." India turned telecom constraints into cultural code.
+                        </p>
+                        <div class="inline-flex gap-2 text-xs font-mono text-white/40 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                            #Nokia1100 #2G_Vibes #Torchlight
+                        </div>
+                    </div>
+
+                    <!-- 2012 -->
+                    <div class="timeline-item relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-midnight border-2 border-white/40 group-hover:border-cyber-cyan group-hover:bg-cyber-cyan transition-all"></div>
+                        <div class="font-mono text-sm text-cyber-cyan font-bold mb-1">2012</div>
+                        <h3 class="text-2xl md:text-3xl font-bold font-syne mb-2">*99# Payment Revolution</h3>
+                        <p class="text-white/60 max-w-xl text-sm leading-relaxed mb-4">
+                            NPCI launches USSD-based mobile banking. Banking without internet on basic feature phones. Dial *99# and access any bank account in India instantly.
+                        </p>
+                        <div class="inline-flex gap-2 text-xs font-mono text-white/40 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                            #USSD_Code #FintechGenesis #NPCI
+                        </div>
+                    </div>
+
+                    <!-- 2016 -->
+                    <div class="timeline-item relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-midnight border-2 border-white/40 group-hover:border-cyber-purple group-hover:bg-cyber-purple transition-all"></div>
+                        <div class="font-mono text-sm text-cyber-purple font-bold mb-1">2016</div>
+                        <h3 class="text-2xl md:text-3xl font-bold font-syne mb-2">UPI Smartphone Boom</h3>
+                        <p class="text-white/60 max-w-xl text-sm leading-relaxed mb-4">
+                            QR codes take over street vendors. Apps replace USSD dialing. But smartphone dependency created new blind spots: bad network coverage, app bloat, and battery anxiety.
+                        </p>
+                        <div class="inline-flex gap-2 text-xs font-mono text-white/40 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                            #QRCodes #SmartphoneApps #DigitalIndia
+                        </div>
+                    </div>
+
+                    <!-- 2026 -->
+                    <div class="timeline-item relative pl-8 md:pl-12 group">
+                        <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-lime-accent border-4 border-midnight shadow-[0_0_15px_#ccff00]"></div>
+                        <div class="font-mono text-sm text-lime-accent font-bold mb-1">2026</div>
+                        <h3 class="text-3xl md:text-4xl font-extrabold font-syne mb-2 text-white text-glow-lime">_99# Reborn</h3>
+                        <p class="text-white/80 max-w-xl text-base leading-relaxed mb-4">
+                            We take the indestructible resilience of the *99# USSD layer and supercharge it with spatial UI, offline AI agent verification, and instant voice-dialing.
+                        </p>
+                        <div class="inline-flex gap-2 text-xs font-mono text-black bg-lime-accent font-bold px-3 py-1.5 rounded-full">
+                            #GenZ_USSD #OfflineAI #FutureTech
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. THE CODE EXPERIENCE (Interactive Simulator) -->
+        <section id="simulator" class="py-28 relative bg-midnight border-t border-white/10 scanlines">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-mono text-lime-accent uppercase tracking-widest">// INTERACTIVE HARDWARE SIMULATOR</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Dial The Future</h2>
+                    <p class="text-white/60 font-space text-sm mt-3">Experience the high-tech revival of India's most iconic code right here in your browser.</p>
+                </div>
+
+                <!-- Phone Simulator Container -->
+                <div class="max-w-md mx-auto glass-panel p-6 rounded-3xl border-2 border-white/15 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative">
+                    
+                    <!-- Top Phone Details -->
+                    <div class="flex justify-between items-center mb-4 font-mono text-xs text-white/40 border-b border-white/10 pb-3">
+                        <span class="flex items-center gap-1.5 text-lime-accent">
+                            <i data-lucide="radio" class="w-3.5 h-3.5"></i> _99# OS v3.0
+                        </span>
+                        <span>BATTERY: 99%</span>
+                    </div>
+
+                    <!-- Screen Display Area -->
+                    <div id="phone-screen" class="cyber-hud p-5 rounded-2xl h-64 flex flex-col justify-between font-mono relative overflow-hidden transition-all duration-300">
+                        <!-- Screen Idle Header -->
+                        <div class="flex justify-between text-[10px] text-cyber-cyan/70 border-b border-cyber-cyan/20 pb-2">
+                            <span>MODE: SECURE_USSD</span>
+                            <span id="screen-status">READY</span>
+                        </div>
+
+                        <!-- Screen Main Content Display -->
+                        <div id="screen-content" class="my-auto text-center space-y-2">
+                            <div class="text-xs text-white/50">ENTER CODE TO INITIALIZE</div>
+                            <div id="dial-input" class="text-3xl font-black tracking-widest text-lime-accent h-10 flex items-center justify-center">
+                                _
+                            </div>
+                        </div>
+
+                        <!-- Screen Footer -->
+                        <div class="text-[10px] text-white/40 flex justify-between border-t border-cyber-cyan/20 pt-2">
+                            <span>CLR = CLEAR</span>
+                            <span>CALL = EXECUTE</span>
+                        </div>
+                    </div>
+
+                    <!-- Physical Keypad -->
+                    <div class="grid grid-cols-3 gap-3 mt-6 font-mono">
+                        <button onclick="pressKey('1')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">1</button>
+                        <button onclick="pressKey('2')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">2</button>
+                        <button onclick="pressKey('3')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">3</button>
+                        
+                        <button onclick="pressKey('4')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">4</button>
+                        <button onclick="pressKey('5')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">5</button>
+                        <button onclick="pressKey('6')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">6</button>
+                        
+                        <button onclick="pressKey('7')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">7</button>
+                        <button onclick="pressKey('8')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">8</button>
+                        <button onclick="pressKey('9')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center hover:border-lime-accent">9</button>
+                        
+                        <button onclick="pressKey('*')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-lime-accent text-center">*</button>
+                        <button onclick="pressKey('0')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-center">0</button>
+                        <button onclick="pressKey('#')" class="keypad-btn p-4 rounded-xl text-xl font-bold text-lime-accent text-center">#</button>
+                    </div>
+
+                    <!-- Action Call / Clear Controls -->
+                    <div class="grid grid-cols-2 gap-3 mt-4 font-mono">
+                        <button onclick="clearKeypad()" class="p-3 rounded-xl bg-red-500/20 border border-red-500/40 text-red-400 font-bold hover:bg-red-500/30 transition-all text-sm">
+                            CLR
+                        </button>
+                        <button onclick="executeCode()" class="p-3 rounded-xl bg-lime-accent text-black font-extrabold hover:bg-white shadow-[0_0_20px_rgba(204,255,0,0.4)] transition-all text-sm flex items-center justify-center gap-2">
+                            <i data-lucide="phone-call" class="w-4 h-4"></i> CALL *99#
+                        </button>
+                    </div>
+
+                    <!-- Preset Quick Dial Hint -->
+                    <div class="mt-4 text-center">
+                        <button onclick="autoFillCode()" class="text-xs font-mono text-cyber-cyan underline hover:text-white transition-colors">
+                            Click to Auto-Dial *99#
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. OLD VS NEW SECTION -->
+        <section id="comparison" class="py-28 relative border-t border-white/10 grid-bg">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-20">
+                    <span class="text-xs font-mono text-lime-accent uppercase tracking-widest">// ARCHITECTURE COMPARISON</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Old Gen vs New Era</h2>
+                </div>
+
+                <!-- Comparison Split Screen -->
+                <div class="grid md:grid-cols-2 gap-8 relative">
+                    
+                    <!-- Old Generation Box -->
+                    <div class="glass-card p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 bg-white/10 px-4 py-1 rounded-bl-xl font-mono text-xs text-white/60">
+                            LEGACY 2012
+                        </div>
+                        <h3 class="text-2xl font-bold font-syne text-white/50 mb-6 flex items-center gap-3">
+                            <i data-lucide="phone-off" class="w-6 h-6 text-white/40"></i> Old Generation
+                        </h3>
+
+                        <ul class="space-y-6 font-mono text-sm text-white/60">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 shrink-0 mt-0.5"></i>
+                                <span><strong>Basic Feature Phone Only:</strong> Monochrome text menus with confusing numeric navigation.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 shrink-0 mt-0.5"></i>
+                                <span><strong>Strict USSD Sessions:</strong> Timeouts every 10 seconds causing transaction drops.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 shrink-0 mt-0.5"></i>
+                                <span><strong>Simple Banking:</strong> Text-only bank balance queries with zero intelligence.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 shrink-0 mt-0.5"></i>
+                                <span><strong>No Data Insights:</strong> No budget tracking, split bills, or smart assistance.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- New Generation Box -->
+                    <div class="glass-panel p-8 rounded-3xl border-2 border-lime-accent/40 relative overflow-hidden group shadow-[0_0_40px_rgba(204,255,0,0.1)]">
+                        <div class="absolute top-0 right-0 bg-lime-accent px-4 py-1 rounded-bl-xl font-mono text-xs font-bold text-black">
+                            _99# 2026 EDITION
+                        </div>
+                        <h3 class="text-2xl font-bold font-syne text-lime-accent mb-6 flex items-center gap-3">
+                            <i data-lucide="zap" class="w-6 h-6 text-lime-accent"></i> Next Generation
+                        </h3>
+
+                        <ul class="space-y-6 font-mono text-sm text-white">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-accent shrink-0 mt-0.5"></i>
+                                <span><strong>AI-Powered Offline Agent:</strong> Local LLM verifies transactions directly on cell tower signals.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-accent shrink-0 mt-0.5"></i>
+                                <span><strong>Voice Commands in Hindi/Regional:</strong> Just speak into any mic, dial *99#, and approve.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-accent shrink-0 mt-0.5"></i>
+                                <span><strong>Smart Security Mesh:</strong> Offline biometric authentication with quantum-resistant keys.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-lime-accent shrink-0 mt-0.5"></i>
+                                <span><strong>Universal Device Sync:</strong> Works seamlessly on $10 feature phones or $2,000 foldables.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. GEN Z PAYMENT MODES -->
+        <section id="modes" class="py-28 relative border-t border-white/10 scanlines">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-20">
+                    <span class="text-xs font-mono text-cyber-cyan uppercase tracking-widest">// SELECT YOUR OPERATING PROFILE</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Choose Payment Personality</h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Mode 01 -->
+                    <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-lime-accent transition-all duration-300 relative group flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs font-mono text-lime-accent mb-3">MODE_01 ///</div>
+                            <h3 class="text-2xl font-black font-syne mb-2">OG Mode</h3>
+                            <p class="text-xs font-mono text-white/50 mb-6">"Dad's trusted code, raw & unfiltered"</p>
+                            <p class="text-sm text-white/70 leading-relaxed mb-6">
+                                Pure text USSD speed. Zero bloated graphics, lightning fast execution, 100% reliable even in crowded festival stadiums with zero 5G connection.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 font-mono text-xs text-lime-accent flex justify-between items-center">
+                            <span>LATENCY: 50ms</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- Mode 02 -->
+                    <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-cyber-cyan transition-all duration-300 relative group flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs font-mono text-cyber-cyan mb-3">MODE_02 ///</div>
+                            <h3 class="text-2xl font-black font-syne mb-2">Smart Mode</h3>
+                            <p class="text-xs font-mono text-white/50 mb-6">"Fast digital payments & instant splits"</p>
+                            <p class="text-sm text-white/70 leading-relaxed mb-6">
+                                Auto-detects bill splits with friends via NFC/Bluetooth proximity dialing. No need to share QR codes or phone numbers.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 font-mono text-xs text-cyber-cyan flex justify-between items-center">
+                            <span>AUTOSPLIT: ON</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- Mode 03 -->
+                    <div class="glass-card p-8 rounded-3xl border border-white/10 hover:border-cyber-purple transition-all duration-300 relative group flex flex-col justify-between">
+                        <div>
+                            <div class="text-xs font-mono text-cyber-purple mb-3">MODE_03 ///</div>
+                            <h3 class="text-2xl font-black font-syne mb-2">Future Mode</h3>
+                            <p class="text-xs font-mono text-white/50 mb-6">"AI-powered voice payments"</p>
+                            <p class="text-sm text-white/70 leading-relaxed mb-6">
+                                Integrated regional voice agent. Simply whisper "Pay Chai $2" into your earpiece — _99# handles the background routing via USSD protocol.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 font-mono text-xs text-cyber-purple flex justify-between items-center">
+                            <span>AI ENGINE: HYPER-LOCAL</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. PAYMENT PERSONALITY SECTION -->
+        <section class="py-28 relative border-t border-white/10 grid-bg">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-20">
+                    <span class="text-xs font-mono text-digital-orange uppercase tracking-widest">// CULTURAL CARDS</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Payment Archetypes</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Archetype 1 -->
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-lime-accent transition-all text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-lime-accent/10 border border-lime-accent flex items-center justify-center text-lime-accent mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="zap" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-bold font-syne text-lg mb-1">The Speed Runner</h3>
+                        <div class="text-xs font-mono text-lime-accent mb-3">Instant Payer</div>
+                        <p class="text-xs text-white/60 leading-relaxed">
+                            Pays the chai stall before the cup even touches the table. Zero waiting for loading spinners.
+                        </p>
+                    </div>
+
+                    <!-- Archetype 2 -->
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-cyber-cyan transition-all text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-cyber-cyan/10 border border-cyber-cyan flex items-center justify-center text-cyber-cyan mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="pie-chart" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-bold font-syne text-lg mb-1">The Saver</h3>
+                        <div class="text-xs font-mono text-cyber-cyan mb-3">Money Tracker</div>
+                        <p class="text-xs text-white/60 leading-relaxed">
+                            Monitors every rupee without syncing bank passwords. Smart offline ledgers keep budgets tight.
+                        </p>
+                    </div>
+
+                    <!-- Archetype 3 -->
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-cyber-purple transition-all text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-cyber-purple/10 border border-cyber-purple flex items-center justify-center text-cyber-purple mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="cpu" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-bold font-syne text-lg mb-1">The Explorer</h3>
+                        <div class="text-xs font-mono text-cyber-purple mb-3">Tech Lover</div>
+                        <p class="text-xs text-white/60 leading-relaxed">
+                            Loves flex-dialing code shortcuts on retro keypads in front of smartphone tap-and-pay snobs.
+                        </p>
+                    </div>
+
+                    <!-- Archetype 4 -->
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-digital-orange transition-all text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-digital-orange/10 border border-digital-orange flex items-center justify-center text-digital-orange mb-4 group-hover:scale-110 transition-transform">
+                            <i data-lucide="users" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="font-bold font-syne text-lg mb-1">The Connector</h3>
+                        <div class="text-xs font-mono text-digital-orange mb-3">Helps Others</div>
+                        <p class="text-xs text-white/60 leading-relaxed">
+                            Helps elders and non-smartphone users make seamless payments without needing internet apps.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. WHY _99# MATTERS -->
+        <section class="py-28 relative border-t border-white/10 bg-midnight scanlines">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-20">
+                    <span class="text-xs font-mono text-lime-accent uppercase tracking-widest">// CORE MISSION</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Why _99# Matters</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <div class="glass-panel p-8 rounded-3xl border border-white/10 flex items-start gap-6 hover:border-lime-accent transition-colors">
+                        <div class="p-4 rounded-2xl bg-lime-accent/10 border border-lime-accent text-lime-accent shrink-0">
+                            <i data-lucide="wifi-off" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold font-syne mb-2">No Internet? Still Connected.</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">
+                                Complete payments deep inside basements, crowded metro tunnels, remote mountain passes, or server crash emergencies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl border border-white/10 flex items-start gap-6 hover:border-cyber-cyan transition-colors">
+                        <div class="p-4 rounded-2xl bg-cyber-cyan/10 border border-cyber-cyan text-cyber-cyan shrink-0">
+                            <i data-lucide="signal-low" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold font-syne mb-2">Weak Signal? Still Works.</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">
+                                USSD operates on the voice signaling channel of cell towers. If your phone can make a voice call, _99# will execute instantly.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl border border-white/10 flex items-start gap-6 hover:border-cyber-purple transition-colors">
+                        <div class="p-4 rounded-2xl bg-cyber-purple/10 border border-cyber-purple text-cyber-purple shrink-0">
+                            <i data-lucide="smartphone" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold font-syne mb-2">Every Phone? Included.</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">
+                                From a 15-year-old Nokia numeric keypad to the latest AI smartphone. True digital equality with zero hardware discrimination.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl border border-white/10 flex items-start gap-6 hover:border-digital-orange transition-colors">
+                        <div class="p-4 rounded-2xl bg-digital-orange/10 border border-digital-orange text-digital-orange shrink-0">
+                            <i data-lucide="heart-handshake" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold font-syne mb-2">Every Person? Empowered.</h3>
+                            <p class="text-white/60 text-sm leading-relaxed">
+                                Financial inclusion shouldn't require buying a $150 smartphone or paying for 4G data packs every month.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. FUTURE CITY SECTION (Visual Data Map) -->
+        <section class="py-28 relative border-t border-white/10 grid-bg overflow-hidden">
+            <div class="max-w-6xl mx-auto px-6 relative z-10">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-xs font-mono text-cyber-cyan uppercase tracking-widest">// DIGITAL NATION MAP</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-syne mt-2 uppercase">Connecting All Of India</h2>
+                    <p class="text-white/60 font-space text-sm mt-4">Unifying every tier of the nation into a seamless digital grid.</p>
+                </div>
+
+                <!-- Animated Flow Diagram -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center font-mono relative">
+                    
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 relative">
+                        <div class="text-xs text-white/40 mb-2">TIER 4</div>
+                        <div class="text-xl font-bold text-lime-accent">Village</div>
+                        <div class="mt-4 text-[10px] text-white/50 border-t border-white/10 pt-2">Feature Phones • GSM</div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 relative">
+                        <div class="text-xs text-white/40 mb-2">TIER 3</div>
+                        <div class="text-xl font-bold text-cyber-cyan">Town</div>
+                        <div class="mt-4 text-[10px] text-white/50 border-t border-white/10 pt-2">Hybrid Networks</div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10 relative">
+                        <div class="text-xs text-white/40 mb-2">TIER 1 & 2</div>
+                        <div class="text-xl font-bold text-cyber-purple">City</div>
+                        <div class="mt-4 text-[10px] text-white/50 border-t border-white/10 pt-2">High Density • 5G</div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border-2 border-lime-accent shadow-[0_0_20px_rgba(204,255,0,0.2)]">
+                        <div class="text-xs text-lime-accent mb-2">FUTURE STATE</div>
+                        <div class="text-xl font-black text-white text-glow-lime">Digital Nation</div>
+                        <div class="mt-4 text-[10px] text-lime-accent border-t border-lime-accent/30 pt-2">100% UNIFIED GRID</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 10. FUTURE ROADMAP -->
+        <section id="future" class="py-28 relative border-t border-white/10 scanlines">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="text-center max-w-2xl mx-auto mb-20">
+                    <span class="text-xs font-mono text-lime-accent uppercase tracking-widest">// DEPLOYMENT TIMELINE</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-syne mt-2 uppercase">Future Roadmap</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 font-mono">
+                    
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-lime-accent text-xs mb-2">PHASE 01 // READY</div>
+                        <h3 class="text-lg font-bold text-white mb-2">AI Voice Payments</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">Instant voice recognition converting local dialect speech to USSD codes.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-lime-accent text-xs mb-2">PHASE 02 // TESTING</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Hindi Voice Assistant</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">Full natural language support for 12 Indian regional languages.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-lime-accent text-xs mb-2">PHASE 03 // DEV</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Offline AI Agent</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">On-device neural net validating transactions locally without server calls.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-cyber-cyan text-xs mb-2">PHASE 04 // UPCOMING</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Smart Fraud Detection</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">Anomaly pattern detection across cell tower frequency changes.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-cyber-cyan text-xs mb-2">PHASE 05 // UPCOMING</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Biometric Payments</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">Voiceprint biometrics replacing standard 4-digit numeric USSD PINs.</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl border border-white/10">
+                        <div class="text-cyber-purple text-xs mb-2">PHASE 06 // VISION</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Digital Inclusion</h3>
+                        <p class="text-xs text-white/60 leading-relaxed">Connecting 100 million unbanked remote users to modern commerce.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. FINAL CTA SECTION -->
+        <section class="py-32 relative border-t border-white/10 bg-midnight grid-bg text-center overflow-hidden">
+            <div class="max-w-4xl mx-auto px-6 relative z-10 space-y-8">
+                
+                <h2 class="text-7xl sm:text-9xl font-black font-syne tracking-tighter text-lime-accent text-glow-lime">
+                    _99#
+                </h2>
+
+                <p class="text-2xl sm:text-4xl font-bold font-syne uppercase tracking-tight max-w-2xl mx-auto leading-snug">
+                    "The internet is optional.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-purple">Connection is not."</span>
+                </p>
+
+                <div class="pt-6">
+                    <button onclick="triggerConfetti()" class="magnetic-btn px-10 py-5 rounded-full bg-lime-accent text-black font-syne font-black uppercase tracking-widest text-base hover:bg-white hover:shadow-[0_0_50px_rgba(204,255,0,0.8)] transition-all">
+                        Join The Code Revolution
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="border-t border-white/10 py-12 bg-midnight/80 font-mono text-xs text-white/40">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <span class="text-lime-accent font-bold font-syne text-lg">_99#</span>
+                    <span class="ml-3">© 2026 _99# MOVEMENT. ALL RIGHTS RESERVED.</span>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-lime-accent transition-colors">TERMS</a>
+                    <a href="#" class="hover:text-lime-accent transition-colors">PRIVACY</a>
+                    <a href="#" class="hover:text-lime-accent transition-colors">USSD SPEC</a>
+                    <a href="#" class="hover:text-lime-accent transition-colors">GITHUB</a>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Smooth Scroll Lenis Initialization
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            touchMultiplier: 2
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Custom Cursor Movement Logic
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.custom-cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            if (cursor && cursorDot) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            }
+        });
+
+        // Magnetic Buttons Hover Effect
+        document.querySelectorAll('.magnetic-btn').forEach((btn) => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px)';
+            });
+        });
+
+        // 1. CINEMATIC INTRO SEQUENCE
+        window.addEventListener('load', () => {
+            const introProgress = document.getElementById('intro-progress');
+            const introText1 = document.getElementById('intro-text-1');
+            const introText2 = document.getElementById('intro-text-2');
+            const introRetroBox = document.getElementById('intro-retro-box');
+            const introCyberBox = document.getElementById('intro-cyber-box');
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+
+            // Phase 1: Nokia Progress Bar
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 25;
+                if (introProgress) introProgress.style.width = progress + '%';
+
+                if (progress === 50) {
+                    if (introText2) introText2.classList.remove('hidden');
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+
+                    // Glitch transition to cyber reboot
+                    setTimeout(() => {
+                        if (introRetroBox) introRetroBox.classList.add('hidden');
+                        if (introCyberBox) introCyberBox.classList.remove('hidden');
+
+                        // Final fade out of intro
+                        setTimeout(() => {
+                            gsap.to(introScreen, {
+                                opacity: 0,
+                                duration: 0.8,
+                                onComplete: () => {
+                                    introScreen.style.display = 'none';
+                                    mainContent.classList.remove('opacity-0');
+                                    initGSAPAnimations();
+                                }
+                            });
+                        }, 1200);
+                    }, 600);
+                }
+            }, 300);
+        });
+
+        // GSAP ScrollTrigger Animations
+        function initGSAPAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Timeline Items reveal
+            gsap.utils.toArray('.timeline-item').forEach((item) => {
+                gsap.from(item, {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 85%'
+                    },
+                    opacity: 0,
+                    x: -30,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+
+            // Glass cards fade in
+            gsap.utils.toArray('.glass-card').forEach((card) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 90%'
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                });
+            });
+        }
+
+        // 4. PHONE SIMULATOR INTERACTIVE LOGIC
+        let currentDial = "";
+
+        function pressKey(key) {
+            if (currentDial.length < 8) {
+                currentDial += key;
+                updateDialDisplay();
+            }
+        }
+
+        function clearKeypad() {
+            currentDial = "";
+            updateDialDisplay();
+            resetScreenMenu();
+        }
+
+        function autoFillCode() {
+            currentDial = "*99#";
+            updateDialDisplay();
+        }
+
+        function updateDialDisplay() {
+            const display = document.getElementById('dial-input');
+            if (display) {
+                display.innerText = currentDial || "_";
+            }
+        }
+
+        function resetScreenMenu() {
+            const screenContent = document.getElementById('screen-content');
+            const screenStatus = document.getElementById('screen-status');
+            if (screenStatus) screenStatus.innerText = "READY";
+            if (screenContent) {
+                screenContent.innerHTML = `
+                    <div class="text-xs text-white/50">ENTER CODE TO INITIALIZE</div>
+                    <div id="dial-input" class="text-3xl font-black tracking-widest text-lime-accent h-10 flex items-center justify-center">
+                        ${currentDial || "_"}
+                    </div>
+                `;
+            }
+        }
+
+        function executeCode() {
+            const screenContent = document.getElementById('screen-content');
+            const screenStatus = document.getElementById('screen-status');
+
+            if (currentDial === "*99#") {
+                if (screenStatus) screenStatus.innerText = "CONNECTED";
+                if (screenContent) {
+                    screenContent.innerHTML = `
+                        <div class="text-xs text-lime-accent font-bold mb-1">Welcome to _99#</div>
+                        <div class="text-[11px] text-white/80 text-left space-y-1 font-mono pl-2">
+                            <div>1. Send Money</div>
+                            <div>2. Split Bill</div>
+                            <div>3. Request Money</div>
+                            <div>4. Balance Query</div>
+                            <div>5. AI Voice Agent</div>
+                        </div>
+                    `;
+                }
+            } else if (currentDial.length > 0) {
+                if (screenStatus) screenStatus.innerText = "EXECUTING...";
+                if (screenContent) {
+                    screenContent.innerHTML = `
+                        <div class="text-xs text-cyber-cyan animate-pulse">Dialing ${currentDial}...</div>
+                        <div class="text-[10px] text-white/50 mt-2">Connecting to USSD Gateway</div>
+                    `;
+                    setTimeout(() => {
+                        screenContent.innerHTML = `
+                            <div class="text-xs text-red-400 font-bold">INVALID CODE</div>
+                            <div class="text-[10px] text-white/50 mt-1">Try dialing *99#</div>
+                        `;
+                    }, 1200);
+                }
+            } else {
+                if (screenContent) {
+                    screenContent.innerHTML = `
+                        <div class="text-xs text-red-400">PLEASE DIAL *99# FIRST</div>
+                    `;
+                    setTimeout(resetScreenMenu, 1500);
+                }
+            }
+        }
+
+        // Final CTA celebration confetti
+        function triggerConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ccff00', '#8a2be2', '#00f3ff']
+            });
+        }
+
+        // THREE.JS PARTICLES BACKGROUND FOR HERO SECTION
+        function initThreeJS() {
+            const canvas = document.getElementById('hero-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Particles Geometry
+            const count = 700;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+
+            for (let i = 0; i < count * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 15;
+                positions[i + 1] = (Math.random() - 0.5) * 15;
+                positions[i + 2] = (Math.random() - 0.5) * 15;
+
+                // Lime (#ccff00) or Cyber Cyan (#00f3ff)
+                if (Math.random() > 0.5) {
+                    colors[i] = 0.8; colors[i + 1] = 1.0; colors[i + 2] = 0.0;
+                } else {
+                    colors[i] = 0.0; colors[i + 1] = 0.95; colors[i + 2] = 1.0;
+                }
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.04,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            camera.position.z = 5;
+
+            // Render loop
+            function animate() {
+                requestAnimationFrame(animate);
+                points.rotation.x += 0.0005;
+                points.rotation.y += 0.001;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize listener
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        initThreeJS();
+    </script>
+</body>
+</html>
